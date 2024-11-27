@@ -1,7 +1,7 @@
 ﻿@model Biblioteca.Models.Livro
 
 @{
-Layout = "_Layout";
+    Layout = "_Layout";
 }
 
 <style>
@@ -51,7 +51,7 @@ Layout = "_Layout";
         margin-bottom: 5px;
     }
 
-    .btn-primary {
+    .btn-primary, .btn-danger, .btn-warning {
         background-color: #007bff;
         border-color: #007bff;
         color: white;
@@ -63,9 +63,27 @@ Layout = "_Layout";
         display: inline-block;
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover, .btn-danger:hover, .btn-warning:hover {
         background-color: #0056b3;
         border-color: #004085;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
     }
 
     /* Responsividade para telas pequenas */
@@ -86,28 +104,37 @@ Layout = "_Layout";
 
 @if (Model != null)
 {
-<div class="card">
-    <div class="card-header">
-        <h4>@Model.LivroTituloOriginal</h4>
-        <p><strong>ISBN:</strong> @Model.LivroISBN</p>
+    <div class="card">
+        <div class="card-header">
+            <h4>@Model.LivroTituloOriginal</h4>
+            <p><strong>ISBN:</strong> @Model.LivroISBN</p>
+        </div>
+        <div class="card-body">
+            <p><strong>Editora:</strong> @Model.LivroEditora.EditoraNome</p>
+            <p><strong>Ano de Publicação:</strong> @Model.LivroAnoPublicacao</p>
+            <p><strong>Páginas:</strong> @Model.LivroPaginas</p>
+            <h5>Autores:</h5>
+            <ul>
+                @foreach (var autorLivro in Model.AutoresDoLivro)
+                {
+                    <li>@autorLivro.Autor.AutorNome</li>
+                }
+            </ul>
+        </div>
     </div>
-    <div class="card-body">
-        <p><strong>Editora:</strong> @Model.LivroEditora.EditoraNome</p>
-        <p><strong>Ano de Publicação:</strong> @Model.LivroAnoPublicacao</p>
-        <p><strong>Páginas:</strong> @Model.LivroPaginas</p>
-        <h5>Autores:</h5>
-        <ul>
-            @foreach (var autorLivro in Model.AutoresDoLivro)
-            {
-            <li>@autorLivro.Autor.AutorNome</li>
-            }
-        </ul>
-    </div>
-</div>
 
-<a href="@Url.Action("Listar", "Livro")" class="btn-primary">Voltar para a lista</a>
+    <!-- Formulário para Excluir -->
+    <form action="@Url.Action("Excluir", "Livro", new { id = Model.LivroID })" method="post" onsubmit="return confirm('Tem certeza que deseja excluir este livro?')">
+        <button type="submit" class="btn-danger">Excluir</button>
+    </form>
+
+    <!-- Botão Editar -->
+    <a href="@Url.Action("Editar", "Livro", new { id = Model.LivroID })" class="btn-warning">Editar</a>
+
+    <!-- Botão Voltar -->
+    <a href="@Url.Action("Listar", "Livro")" class="btn-primary">Voltar para a lista</a>
 }
 else
 {
-<p>Livro não encontrado.</p>
+    <p>Livro não encontrado.</p>
 }
