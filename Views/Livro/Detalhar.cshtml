@@ -1,0 +1,113 @@
+﻿@model Biblioteca.Models.Livro
+
+@{
+Layout = "_Layout";
+}
+
+<style>
+    /* CSS Básico para a página de Detalhes */
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+        font-size: 1.5em;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    h4 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+
+    p {
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    ul li {
+        font-size: 1.1em;
+        margin-bottom: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1.1em;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    /* Responsividade para telas pequenas */
+    h2 {
+        font-size: 1.5em;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-header {
+        padding: 10px;
+    }
+</style>
+
+<h2>Detalhes do Livro</h2>
+
+@if (Model != null)
+{
+<div class="card">
+    <div class="card-header">
+        <h4>@Model.LivroTituloOriginal</h4>
+        <p><strong>ISBN:</strong> @Model.LivroISBN</p>
+    </div>
+    <div class="card-body">
+        <p><strong>Editora:</strong> @Model.LivroEditora.EditoraNome</p>
+        <p><strong>Ano de Publicação:</strong> @Model.LivroAnoPublicacao</p>
+        <p><strong>Páginas:</strong> @Model.LivroPaginas</p>
+        <h5>Autores:</h5>
+        <ul>
+            @foreach (var autorLivro in Model.AutoresDoLivro)
+            {
+            <li>@autorLivro.Autor.AutorNome</li>
+            }
+        </ul>
+    </div>
+</div>
+
+<a href="@Url.Action("Listar", "Livro")" class="btn-primary">Voltar para a lista</a>
+}
+else
+{
+<p>Livro não encontrado.</p>
+}

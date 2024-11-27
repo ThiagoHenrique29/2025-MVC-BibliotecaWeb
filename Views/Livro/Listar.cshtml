@@ -1,0 +1,110 @@
+﻿@{
+Layout = "_Layout";
+}
+
+<style>
+    /* Estilo para o corpo da página */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fc;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Estilo para a tabela */
+    table {
+        width: 100%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilo para os cabeçalhos da tabela */
+    table th {
+        background-color: #007bff;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 16px;
+        border-bottom: 2px solid #ddd;
+    }
+
+    /* Estilo para as células da tabela */
+    table td {
+        padding: 12px;
+        text-align: left;
+        font-size: 14px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Estilo para as linhas alternadas da tabela */
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    /* Estilo para o link de ação (Detalhar) */
+    a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Efeito hover para o link */
+    a:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    /* Estilo para a lista de autores */
+    ul {
+        padding-left: 20px;
+        list-style-type: none;
+    }
+
+    /* Estilo para cada item de autor na lista */
+    ul li {
+        font-size: 14px;
+        color: #555;
+    }
+</style>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Título do Livro</th>
+        <th>Editora</th>
+        <th>Autores</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var livro in ViewBag.dados)
+    {
+    <tr>
+        <td>
+            @livro.LivroTituloOriginal
+        </td>
+        <td>
+            @livro.LivroEditora.EditoraNome
+        </td>
+        <td>
+            <ul>
+                @foreach (var autorLivro in livro.AutoresDoLivro)
+                {
+                <li>@autorLivro.Autor.AutorNome</li>
+                }
+            </ul>
+        </td>
+        <td>
+            <a asp-controller="Livro" asp-action="Detalhar" asp-route-id="@livro.LivroID">Detalhar</a>
+
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>

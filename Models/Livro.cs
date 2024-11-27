@@ -8,10 +8,10 @@ public class Livro
     public int LivroID { get; set; }
     public string LivroTituloOriginal { get; set; }
     public string? LivroTituloNacional { get; set; }
-    public ushort? LivroPaginas { get; set; }
+    public ushort LivroPaginas { get; set; }
     public string LivroISBN { get; set; }
     public ushort LivroAnoPublicacao { get; set; }
-    public byte[] LivroCapa { get; set; }
+    //public byte[] LivroCapa { get; set; }
     public int EditoraID { get; set; }
     public Editora LivroEditora { get; set; }
     public ICollection<OperacaoCompraVenda> LivroOperacoes { get; set; }
@@ -29,7 +29,7 @@ public class LivroConfiguration : IEntityTypeConfiguration<Livro>
 
         builder.Property(p => p.LivroTituloOriginal).HasMaxLength(120).IsRequired();
         builder.Property(p => p.LivroTituloNacional).HasMaxLength(120);
-        builder.Property(p => p.LivroPaginas).HasDefaultValue(0);
+        builder.Property(p => p.LivroPaginas).HasDefaultValue(0).IsRequired();
         builder.Property(p => p.LivroISBN).HasMaxLength(13).IsRequired();
 
         builder.HasOne<Editora>(p => p.LivroEditora)
