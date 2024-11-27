@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Biblioteca.Models;
+using System.Linq;
 
 namespace Biblioteca.Controllers
 {
@@ -13,15 +14,25 @@ namespace Biblioteca.Controllers
             _contexto = contexto;
         }
 
-        // Ação para listar os livros
-        public ActionResult Listar()
+        // Ação para listar os livros, agora com suporte a pesquisa
+        public ActionResult Listar(string search)
         {
-            var TodosOsLivros = _contexto.Livros
+            var livros = _contexto.Livros
                 .Include(p => p.LivroEditora)
-                .Include(p => p.AutoresDoLivro).ThenInclude(p => p.Autor);
+                .Include(p => p.AutoresDoLivro).ThenInclude(p => p.Autor)
+                .AsQueryable();
 
+            // Se houver algo no campo de busca, filtra os livros pelo título
+            if (!string.IsNullOrEmpty(search))
+            {
+                livros = livros.Where(l => l.LivroTituloOriginal.Contains(search));
+            }
+
+            // Passa o valor da pesquisa de volta para a View
+            ViewBag.SearchTerm = search;
+    
             ViewData["Title"] = "Lista de Livros";
-            ViewBag.dados = TodosOsLivros;
+            ViewBag.dados = livros.ToList();
 
             return View();
         }
@@ -38,7 +49,7 @@ namespace Biblioteca.Controllers
             var livro = _contexto.Livros
                 .Include(p => p.LivroEditora)
                 .Include(p => p.AutoresDoLivro)
-                    .ThenInclude(p => p.Autor)
+                .ThenInclude(p => p.Autor)
                 .FirstOrDefault(l => l.LivroID == id);
 
             // Verifica se o livro foi encontrado
@@ -48,30 +59,6 @@ namespace Biblioteca.Controllers
             }
 
             return View(livro); // Passa o livro para a view
-        }
-
-        // Ação para Excluir o livro
-        [HttpPost]
-        [ActionName("Excluir")]
-        public ActionResult ExcluirConfirmado(int id)
-        {
-            // Busca o livro pelo ID
-            var livro = _contexto.Livros.FirstOrDefault(l => l.LivroID == id);
-
-            // Verifica se o livro foi encontrado
-            if (livro == null)
-            {
-                return NotFound(); // Se não encontrar o livro, retorna 404
-            }
-
-            // Remove o livro do contexto
-            _contexto.Livros.Remove(livro);
-
-            // Salva as alterações no banco de dados
-            _contexto.SaveChanges();
-
-            // Redireciona para a lista de livros após a exclusão
-            return RedirectToAction("Listar");
         }
     }
 }

@@ -12,6 +12,35 @@ Layout = "_Layout";
         padding: 0;
     }
 
+    /* Estilo para o formulário de pesquisa */
+    .search-container {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .search-container input[type="text"] {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 50%;
+        max-width: 400px;
+    }
+
+    .search-container button {
+        padding: 8px 16px;
+        font-size: 16px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .search-container button:hover {
+        background-color: #0056b3;
+    }
+
     /* Estilo para a tabela */
     table {
         width: 100%;
@@ -72,7 +101,17 @@ Layout = "_Layout";
         color: #555;
     }
 </style>
+
 <h1>Lista de Livros</h1>
+
+<!-- Formulário de pesquisa -->
+<div class="search-container">
+    <form method="get" action="@Url.Action("Listar", "Livro")">
+        <input type="text" name="search" placeholder="Buscar pelo título do livro..." value="@ViewBag.SearchTerm">
+        <button type="submit">Pesquisar</button>
+    </form>
+</div>
+
 <table class="table table-striped">
     <thead>
     <tr>
@@ -102,7 +141,6 @@ Layout = "_Layout";
         </td>
         <td>
             <a asp-controller="Livro" asp-action="Detalhar" asp-route-id="@livro.LivroID">Detalhar</a>
-
         </td>
     </tr>
     }
